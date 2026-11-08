@@ -1,0 +1,10 @@
+src/**
+test/**
+.vscode/**
+tsconfig.json
+*.vsix
+.gitignore
+scripts/**
+release/**
+assets/*.svg
+.profiles/**

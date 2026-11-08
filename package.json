@@ -1,0 +1,131 @@
+{
+  "name": "md-to-csdn",
+  "displayName": "Markdown Publish Bridge",
+  "description": "将 Markdown 正文和本地、外链图片自动填入 CSDN 与知乎编辑器，保留可复制的文章内容。",
+  "version": "0.4.0",
+  "publisher": "local-dev",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/wangzijie976-ctrl/Markdown-Publish-Bridge.git" },
+  "homepage": "https://github.com/wangzijie976-ctrl/Markdown-Publish-Bridge#readme",
+  "bugs": { "url": "https://github.com/wangzijie976-ctrl/Markdown-Publish-Bridge/issues" },
+  "icon": "assets/icon.png",
+  "keywords": ["markdown", "csdn", "zhihu", "publish", "image upload", "知乎"],
+  "pricing": "Free",
+  "galleryBanner": { "color": "#10213C", "theme": "dark" },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.cjs",
+  "extensionKind": [
+    "ui"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    },
+    "virtualWorkspaces": false
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "mdToCsdn.choosePlatform",
+        "title": "Markdown Publish Bridge: 选择发布平台"
+      },
+      {
+        "command": "mdToCsdn.prepare",
+        "title": "Markdown Publish Bridge: 上传到 CSDN"
+      },
+      {
+        "command": "mdToCsdn.inspect",
+        "title": "Markdown Publish Bridge: 检查文章图片"
+      },
+      {
+        "command": "mdToCsdn.close",
+        "title": "Markdown Publish Bridge: 关闭登录浏览器"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "mdToCsdn.choosePlatform",
+          "when": "editorLangId == markdown && resourceScheme == file && isWorkspaceTrusted",
+          "group": "navigation@90"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "mdToCsdn.prepare",
+          "when": "editorLangId == markdown",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Markdown Publish Bridge",
+      "properties": {
+        "mdToCsdn.browserChannel": {
+          "type": "string",
+          "enum": [
+            "msedge",
+            "chrome"
+          ],
+          "default": "msedge",
+          "scope": "application",
+          "description": "使用已安装的浏览器，独立登录配置。"
+        },
+        "mdToCsdn.titleSelector": {
+          "type": "string",
+          "default": "input.article-bar__title",
+          "scope": "application"
+        },
+        "mdToCsdn.bodySelector": {
+          "type": "string",
+          "default": ".editor__inner",
+          "scope": "application",
+          "description": "CSDN Markdown 源码编辑区域 CSS 选择器，页面改版时可调整。"
+        },
+        "mdToCsdn.imageInputSelector": {
+          "type": "string",
+          "default": "[role=\"dialog\"][aria-label=\"Insert image\"] input[type=\"file\"]",
+          "scope": "application"
+        },
+        "mdToCsdn.imageButtonSelector": {
+          "type": "string",
+          "default": "button[data-title^=\"图片\"]",
+          "scope": "application",
+          "description": "可选：打开图片上传控件的按钮 CSS 选择器。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --target=node20 --external:vscode --external:playwright-core --outfile=dist/extension.cjs",
+    "check": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "test:browser": "tsx --test test/browser.integration.ts",
+    "package": "npm run build && vsce package --allow-missing-repository",
+    "package:marketplace": "npm run check && npm run build && node scripts/package-marketplace.cjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.56.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^4.1.0",
+    "esbuild": "^0.25.0",
+    "hast-util-to-html": "^9.0.6",
+    "parse5": "^7.3.0",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "unified": "^11.0.5"
+  }
+}

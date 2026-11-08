@@ -1,0 +1,1 @@
+{ "version": "0.2.0", "configurations": [{ "name": "运行 Markdown Publish Bridge", "type": "extensionHost", "request": "launch", "args": ["--extensionDevelopmentPath=${workspaceFolder}"], "outFiles": ["${workspaceFolder}/dist/**/*.cjs"] }] }
